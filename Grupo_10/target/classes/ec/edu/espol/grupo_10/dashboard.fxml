@@ -243,7 +243,7 @@
                                           <ImageView fx:id="imMostrarMiVehiculo" fitHeight="166.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                     </AnchorPane>
-                                    <Button fx:id="btnEliminarVehiculo" contentDisplay="CENTER" layoutX="254.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#fnEliminarVehiculo" prefHeight="26.0" prefWidth="178.0" style="-fx-background-color: #1c2833;" text="✗ Eliminar vehículo" textFill="WHITE">
+                                    <Button fx:id="btnEliminarVehiculo" contentDisplay="CENTER" layoutX="254.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#fnEliminarVehiculo" prefHeight="26.0" prefWidth="178.0" style="-fx-background-color: #1c2833;" text="✗ Eliminar vehículo" textFill="WHITE" visible="false">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>

@@ -420,7 +420,15 @@ public class DashboardController implements Initializable {
         this.tvVehiculo.setItems(obListVehiculos);
     }
     
-    private void ordenarPorPrecio(){
+    private void comprarVehiculo(Vehiculo v){
+        ArrayList<Usuario> usuarios = Usuario.readFileSer();
+        Usuario vendedor = Usuario.filtrarUsuario(usuarios, v.getPropietario().getCorreo());
+        vendedor.getVehiculos().remove(v);
+        vehiculos.remove(v);
+        Usuario.saveListUsuariosSer(usuarios);
+        Vehiculo.saveListVehiculosSer(vehiculos);
+        String cuerpo = "El propietario del vehículo:\n" + v.getMarca() + " " + v.getModelo() + " - Placa: " + v.getPlaca() + " - Recorrido: " + v.getKilometraje() + "\nHa aceptado tu oferta de: " + v.getPrecio();
+        UtileriaMensajes.sendMensaje(vendedor.getCorreo(), "¡Una de sus ofertas ha sido aceptada!", cuerpo + "\nCorreo del propietario: " + usuarioActual.getCorreo());
     }
     
     private void cargarFiltros(){

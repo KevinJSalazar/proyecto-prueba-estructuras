@@ -88,16 +88,16 @@ public class ArrayList<E> implements List<E>, Iterable<E>, Serializable{
         return eremove;
     }
     
-//    public E remove(E e){
-//        E eremove = null;
-//        if(e!=null){
-//            for(int i=0;i<effectiveSize;i++){
-//                if(e.equals(elements[i]))
-//                    eremove = remove(i);
-//            }
-//        }
-//        return eremove;
-//    }
+    public E remove(E e){
+        E eremove = null;
+        if(e!=null){
+            for(int i=0;i<effectiveSize;i++){
+                if(e.equals(elements[i]))
+                    eremove = remove(i);
+            }
+        }
+        return eremove;
+    }
 
     @Override
     public boolean isEmpty() {
