@@ -13,3 +13,4 @@ ec\edu\espol\grupo_10\App.class
 ec\edu\espol\model\Usuario.class
 ec\edu\espol\model\ArrayList.class
 ec\edu\espol\controllers\RegisterController.class
+ec\edu\espol\model\Favorito.class

@@ -5,9 +5,11 @@
 package ec.edu.espol.controllers;
 
 import ec.edu.espol.model.ArrayList;
+import ec.edu.espol.model.Favorito;
 import ec.edu.espol.model.Usuario;
 import ec.edu.espol.model.Vehiculo;
 import ec.edu.espol.util.UtileriaFunciones;
+import static ec.edu.espol.util.UtileriaFunciones.ajustarTamañoImagen;
 import ec.edu.espol.util.UtileriaMensajes;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -31,6 +34,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -101,6 +106,8 @@ public class DashboardController implements Initializable {
     
     private Usuario usuarioActual;
     private Vehiculo vehiculoSeleccionadoActual;
+    private Vehiculo vehiculoActual;
+//    private Favorito favoritoActual;
     FileChooser fc = new FileChooser();
     private File imgFile;
     private File imgCargarFile;
@@ -110,6 +117,7 @@ public class DashboardController implements Initializable {
     private int cantidadAutos;
     private int cantidadCamionetas;
     private int cantidadMotos;
+//    private ArrayList<Favorito> favoritos;
     // ATRIBUTOS NO FXML
     
     @FXML
@@ -128,6 +136,24 @@ public class DashboardController implements Initializable {
     private Text txtAreaInfoMiVeh;
     @FXML
     private Button btnEliminarVehiculo;
+    @FXML
+    private Button btnComprar;
+    @FXML
+    private Button btnFavoritos;
+    @FXML
+    private AnchorPane dashboardFavoritos;
+    @FXML
+    private Label lblMDefault;
+    @FXML
+    private HBox hbPrincipal;
+    @FXML
+    private Button btnQuitarFavorito;
+    @FXML
+    private Text txtInfoFavorito;
+    @FXML
+    private Button btnAñadirFavorito;
+    @FXML
+    private ComboBox<String> cbxFKilometraje;
     
 
     /**
@@ -136,9 +162,17 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         vehiculos = Vehiculo.readFileSer();
+//        favoritos = Favorito.readFileSer();
+//        habilitarBtnsCA(vehiculoActual);
+      
         if(!vehiculos.isEmpty()){
-                navegarEnLista(vehiculos);
-            }
+            vehiculoActual = vehiculos.get(indiceActual);
+            habilitarBtnsCA(vehiculoActual);
+            navegarEnLista(vehiculos);   
+        }
+        
+//        favoritosDinamico(); // PRUEBA Y ERROR
+        
         cargarFiltros();
         
         cbxTipo.getItems().addAll("Carro", "Moto", "Camioneta");
@@ -154,11 +188,20 @@ public class DashboardController implements Initializable {
     public void setUsuario(Usuario u){
         this.usuarioActual = u;
         lblNombreUsuario.setText(usuarioActual.getNombre());
+//        this.favoritoActual = new Favorito(usuarioActual);
     }
     
     public void navegarEnLista(ArrayList<Vehiculo> vehiculos){
         indiceActual = 0;
-        actualizarVehiculo(vehiculos.get(indiceActual));
+        
+        vehiculoActual = vehiculos.get(indiceActual);
+//        actualizarVehiculo(vehiculos.get(indiceActual));
+        
+        if (!vehiculos.isEmpty()) {
+                habilitarBtnsCA(vehiculoActual);
+                actualizarVehiculo(vehiculoActual);
+//                favoritosDinamico(); // PRUEBA Y ERROR
+            }
 
         btnSiguiente.setDisable(vehiculos.isEmpty());
         btnAtrás.setDisable(true);
@@ -168,7 +211,13 @@ public class DashboardController implements Initializable {
             if (indiceActual >= vehiculos.size()) {
                 indiceActual = 0;
             }
-            actualizarVehiculo(vehiculos.get(indiceActual));
+            
+            vehiculoActual = vehiculos.get(indiceActual);
+            actualizarVehiculo(vehiculoActual);
+            habilitarBtnsCA(vehiculoActual);
+            
+//            actualizarVehiculo(vehiculos.get(indiceActual));           
+//            habilitarBtnsCA(vehiculos.get(indiceActual));
         });
 
         btnAtrás.setOnAction(event -> {
@@ -176,8 +225,14 @@ public class DashboardController implements Initializable {
             if (indiceActual < 0) {
                 indiceActual = vehiculos.size() - 1; 
             }
-            actualizarVehiculo(vehiculos.get(indiceActual));
-        });       
+            
+            vehiculoActual = vehiculos.get(indiceActual);
+            actualizarVehiculo(vehiculoActual);
+            habilitarBtnsCA(vehiculoActual);
+            
+//            actualizarVehiculo(vehiculos.get(indiceActual));
+//            habilitarBtnsCA(vehiculos.get(indiceActual));
+        });         
     }
     
     private void actualizarContabilidad(ArrayList<Vehiculo> vehiculoContados){
@@ -196,6 +251,22 @@ public class DashboardController implements Initializable {
         btnAtrás.setDisable(vehiculos.size() <= 1); 
     }
     
+    public void habilitarBtnsCA(Vehiculo vehiculo){
+        if(usuarioActual != null && vehiculo != null){
+            if(UtileriaFunciones.otorgarPermisos(usuarioActual, vehiculo)){
+                btnComprar.setDisable(true);
+                btnAñadirFavorito.setDisable(true);
+            } else{
+                btnComprar.setDisable(false);
+                btnAñadirFavorito.setDisable(false);
+            }}
+//        } else{
+//            btnComprar.setDisable(true);
+//            btnAñadirCarrito.setDisable(true);
+//        }       
+    }
+    
+    
     @FXML
     public void cambiarPestañas(ActionEvent event){
         vehiculos = Vehiculo.readFileSer();
@@ -203,24 +274,35 @@ public class DashboardController implements Initializable {
             dashboardPrincipal.setVisible(true);
             dashboardVV.setVisible(false);
             dashboardAV.setVisible(false);
+            dashboardFavoritos.setVisible(false);
             if(!vehiculos.isEmpty()){
-                navegarEnLista(vehiculos);
+                navegarEnLista(vehiculos);                
             }
             cargarFiltros();
         } else if(event.getSource() == btnSeccionVer){
             dashboardPrincipal.setVisible(false);
             dashboardVV.setVisible(true);
             dashboardAV.setVisible(false);
+            dashboardFavoritos.setVisible(false);
             cargarVehiculos();
 //            actualizarContabilidad(vehiculos);
         } else if(event.getSource() == btnSeccionAgregar){
             dashboardPrincipal.setVisible(false);
             dashboardVV.setVisible(false);
+            dashboardFavoritos.setVisible(false);
             dashboardAV.setVisible(true);
+        } else if(event.getSource() == btnFavoritos){
+            dashboardFavoritos.setVisible(true);
+            dashboardPrincipal.setVisible(false);
+            dashboardVV.setVisible(false);
+            dashboardAV.setVisible(false);
+//            favoritosDinamico(); // PRUEBA Y ERROR
         } else{
             dashboardPrincipal.setVisible(true);
             dashboardVV.setVisible(false);
             dashboardAV.setVisible(false);
+            dashboardFavoritos.setVisible(false);
+//            habilitarBtnsCA(vehiculoActual);
         }
     }
     
@@ -242,7 +324,7 @@ public class DashboardController implements Initializable {
         String marca = this.cbxFMarca.getSelectionModel().getSelectedItem();
         String modelo = this.cbxFModelo.getSelectionModel().getSelectedItem();
         String precio = this.cbxFPrecio.getSelectionModel().getSelectedItem();
-//        String kilometraje = this.cbxFKilometraje.getSelectionModel().getSelectedItem();
+        String kilometraje = this.cbxFKilometraje.getSelectionModel().getSelectedItem();
         int precioMin = 1, precioMax = Integer.MAX_VALUE;
         double kilometrajeMin = 0, kilometrajeMax = Double.MAX_VALUE;
         try{
@@ -255,14 +337,14 @@ public class DashboardController implements Initializable {
                 precioMax = Integer.parseInt(precios[1]);
             }
             
-//            if (kilometraje.contains("+")){
-//                kilometrajeMin = Double.parseDouble(kilometraje.split("\\+")[0]);
-//                kilometrajeMax = Double.MAX_VALUE;
-//            } else if (kilometraje.contains(" - ")){
-//                String[] kilometrajes = kilometraje.split(" - ");
-//                kilometrajeMin = Double.parseDouble(kilometrajes[0]);
-//                kilometrajeMax = Double.parseDouble(kilometrajes[1]);
-//            }
+            if (kilometraje.contains("+")){
+                kilometrajeMin = Double.parseDouble(kilometraje.split("\\+")[0]);
+                kilometrajeMax = Double.MAX_VALUE;
+            } else if (kilometraje.contains(" - ")){
+                String[] kilometrajes = kilometraje.split(" - ");
+                kilometrajeMin = Double.parseDouble(kilometrajes[0]);
+                kilometrajeMax = Double.parseDouble(kilometrajes[1]);
+            }
 
             ArrayList<Vehiculo> vehFiltrados = Vehiculo.filtrarVehiculos(vehiculos, tipo, marca, modelo, precioMin, precioMax, kilometrajeMin, kilometrajeMax);
             navegarEnLista(vehFiltrados);
@@ -278,6 +360,7 @@ public class DashboardController implements Initializable {
         cbxFMarca.getSelectionModel().selectFirst();
         cbxFModelo.getSelectionModel().selectFirst();
         cbxFPrecio.getSelectionModel().selectFirst();
+        cbxFKilometraje.getSelectionModel().selectFirst();
     }
 
     @FXML
@@ -382,7 +465,7 @@ public class DashboardController implements Initializable {
                 try{
                     Vehiculo.saveListVehiculosSer(vehiculos);
                     cargarVehiculos();
-                    UtileriaMensajes.generarAlertaInfo("Actualizacion exitosa", "¡El vehiculo con placa "+ placa +" ha sido modificada!");
+                    UtileriaMensajes.generarAlertaInfo("Actualizacion exitosa", "¡El vehiculo con placa "+ placa +" ha sido modificado!");
                 } catch(Exception e){
                     UtileriaMensajes.generarAlertaError("Error ", "No se pudo actualizar el vehiculo de placa" + placa);
                 }
@@ -421,20 +504,27 @@ public class DashboardController implements Initializable {
     }
     
     private void comprarVehiculo(Vehiculo v){
-        ArrayList<Usuario> usuarios = Usuario.readFileSer();
-        Usuario vendedor = Usuario.filtrarUsuario(usuarios, v.getPropietario().getCorreo());
-        vendedor.getVehiculos().remove(v);
-        vehiculos.remove(v);
-        Usuario.saveListUsuariosSer(usuarios);
-        Vehiculo.saveListVehiculosSer(vehiculos);
-        String cuerpo = "El propietario del vehículo:\n" + v.getMarca() + " " + v.getModelo() + " - Placa: " + v.getPlaca() + " - Recorrido: " + v.getKilometraje() + "\nHa aceptado tu oferta de: " + v.getPrecio();
-        UtileriaMensajes.sendMensaje(vendedor.getCorreo(), "¡Una de sus ofertas ha sido aceptada!", cuerpo + "\nCorreo del propietario: " + usuarioActual.getCorreo());
+        if(UtileriaMensajes.generarAlertaConfirmacion("Confirmar compra", "¿Está seguro de comprar este vehículo?")){
+            ArrayList<Usuario> usuarios = Usuario.readFileSer();
+            Usuario vendedor = Usuario.filtrarUsuario(usuarios, v.getPropietario().getCorreo());
+            vendedor.getVehiculos().remove(v);
+            UtileriaFunciones.eliminarImagenVehiculoEliminado(v.getPlaca()); // Para eliminar la imagen de ese vehículo
+            vehiculos.remove(v);
+            Usuario.saveListUsuariosSer(usuarios);
+            Vehiculo.saveListVehiculosSer(vehiculos);
+            String cuerpo = "El propietario del vehículo:\n" + v.getMarca() + " " + v.getModelo() + " - Placa: " + v.getPlaca() + " - Recorrido: " + v.getKilometraje() + "\nHa aceptado tu oferta de: " + v.getPrecio();
+            UtileriaMensajes.sendMensaje(vendedor.getCorreo(), "¡Una de sus ofertas ha sido aceptada!", cuerpo + "\nCorreo del propietario: " + usuarioActual.getCorreo());
+            UtileriaMensajes.generarAlertaInfo("", "¡Se ha informado con éxito al vendedor de su compra!");
+        } else {
+            UtileriaMensajes.generarAlertaInfo("", "Parece que todavía no es el momento para que lo compres, ¡una lástima! :c");
+        }
+        actualizarContabilidad(vehiculos);
     }
     
     private void cargarFiltros(){
         limpiarCombobox();
-        cbxFPrecio.getItems().addAll("0 - 2000", "2001 - 5000" , "50001 - 8000", "8000+");
-//        cbxFKilometraje.getItems().addAll("0 - 2000", "2001 - 5000" , "50001 - 8000", "8000+");
+        cbxFPrecio.getItems().addAll("0 - 4000", "4001 - 8000" , "8001 - 12000", "12000+");
+        cbxFKilometraje.getItems().addAll("0 - 2000", "2001 - 5000" , "5001 - 8000", "8000+");
 
         ArrayList<String> tipos = UtileriaFunciones.getTipos(vehiculos);
         for(int i = 0; i < tipos.size(); i++){
@@ -473,11 +563,99 @@ public class DashboardController implements Initializable {
         cbxFMarca.getItems().setAll("Todos");
         cbxFModelo.getItems().setAll("Todos");
         cbxFPrecio.getItems().setAll("Todos");
-        //////
+        cbxFKilometraje.getItems().setAll("Todos");
+        
         cbxFTipo.getSelectionModel().selectFirst();
         cbxFMarca.getSelectionModel().selectFirst();
         cbxFModelo.getSelectionModel().selectFirst();
         cbxFPrecio.getSelectionModel().selectFirst();
-        //////
+        cbxFKilometraje.getSelectionModel().selectFirst();
     }
+
+    @FXML
+    private void fnComprarVehiculo(MouseEvent event) {
+        comprarVehiculo(vehiculoActual);
+    }
+
+
+    @FXML
+    private void fnEliminarFavorito(MouseEvent event) {
+    }
+
+    @FXML
+    private void fnComprarFavorito(MouseEvent event) {
+    }
+
+    @FXML
+    private void fnAñadirFavorito(MouseEvent event) {
+        
+    }
+//        favoritos = Favorito.readFileSer();
+//        if(favoritos.isEmpty()){
+//            favoritos.addLast(favoritoActual);
+////            Favorito.saveListFavoritosSer(favoritos);
+//        } else{
+//            for(int i = 0; i < favoritos.size(); i++){
+//                if(favoritos.get(i).getUsuario().getCorreo().equals(favoritoActual.getUsuario().getCorreo())){
+//                    ArrayList<Vehiculo> vehiculosFavoritos1 = favoritos.get(i).getVehiculosFavoritos();
+//                    if(vehiculosFavoritos1.isEmpty()){
+//                       vehiculosFavoritos1.addLast(vehiculoActual);
+//                       favoritos.get(i).setVehiculosFavoritos(vehiculosFavoritos1);
+//                       UtileriaMensajes.generarAlertaInfo("", "¡Has añadido este vehículo a tus favoritos!");
+////                       Favorito.saveListFavoritosSer(favoritos);
+//                    } else{
+//                        ArrayList<Vehiculo> vehiculosFavoritos2 = favoritos.get(i).getVehiculosFavoritos();
+//                        for(int j = 0; j < vehiculosFavoritos2.size(); j++){
+//                            if(vehiculosFavoritos2.get(j).getPlaca().equals(vehiculoActual.getPlaca())){
+//                                UtileriaMensajes.generarAlertaError("", "Ya ha agregado este vehículo a sus favoritos.");
+//                            } else{
+//                                vehiculosFavoritos2.addLast(vehiculoActual);
+//                                favoritos.get(i).setVehiculosFavoritos(vehiculosFavoritos2);
+//                                UtileriaMensajes.generarAlertaInfo("", "¡Has añadido este vehículo a tus favoritos!");
+////                                Favorito.saveListFavoritosSer(favoritos);
+//                            }
+//                        }
+//                    }                        
+//                }
+//            }
+//        }  
+//        Favorito.saveListFavoritosSer(favoritos);  
+//        favoritosDinamico();
+//    }
+//    
+//    private void favoritosDinamico(){
+//        ArrayList<Vehiculo> vehiculosFav = favoritoActual.getVehiculosFavoritos();
+//        hbPrincipal.setSpacing(10);
+//        if(vehiculosFav.size() > 0 ){
+//            lblMDefault.setText("");
+//            
+//            for(int i = 0; i < vehiculosFav.size(); i++){
+//                Vehiculo veh = vehiculosFav.get(i);
+//                VBox vbox = new VBox(10);
+//                String nombreImagen = veh.getPlaca()+".png";
+//                String rutaProyecto = System.getProperty("user.dir")+File.separator+"src"+File.separator+"main"+File.separator+"resources";
+//                String rutaCarpetaDestino = rutaProyecto + File.separator + "imagenesVehiculos";
+//                imgFile = new File(rutaCarpetaDestino, nombreImagen);
+//                Image imagen = new Image(imgFile.toURI().toString());
+//                ImageView imv = null;
+//                imagen = ajustarTamañoImagen(imagen, imv.getFitWidth() ,imv.getFitHeight());
+//                imv.setImage(imagen);
+//                String previoI = veh.getMarca().toUpperCase()+" "+veh.getModelo().toUpperCase()+"\n 💲"+veh.getPrecio();
+//                Text text = new Text(previoI);
+//                vbox.getChildren().addAll(imv, text);
+//                VBox.setMargin(imv, new Insets(5));
+//                VBox.setMargin(text, new Insets(5));
+//                HBox.setMargin(vbox, new Insets(10));
+//                hbPrincipal.getChildren().add(vbox); 
+//                
+//                vbox.setOnMouseClicked(event ->{
+//                    String info = UtileriaFunciones.crearMensajeAuto(veh.getTipo(), veh.getPlaca(),veh.getMarca(), veh.getModelo(), veh.getPrecio(), veh.getKilometraje());
+//                    txtInfoFavorito.setText(info);
+//                });
+//                
+//            } 
+//        } else{
+//            lblMDefault.setText("No tiene favoritos por el momento");
+//        } 
+//    }
 }

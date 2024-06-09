@@ -12,6 +12,8 @@ import ec.edu.espol.model.Vehiculo;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
@@ -119,6 +121,20 @@ public class UtileriaFunciones {
         return vistaPrevia.snapshot(null, null);
     }
     
+    public static void eliminarImagenVehiculoEliminado(String placa){
+        String nombreImagen = placa+".png";
+        String directorioProyecto = System.getProperty("user.dir");
+        Path rutaImagen = Paths.get(directorioProyecto, "imagenesVehiculos", nombreImagen);
+        Path pathImagen = Paths.get(rutaImagen.toString());
+        try{
+            if(Files.exists(pathImagen)){
+                Files.delete(pathImagen);
+            } else{}
+        } catch(IOException e){
+            UtileriaMensajes.generarAlertaError("Error", "No se ha podido eliminar la imagen.");
+        }
+    }
+    
     public static ArrayList<String> getTipos(ArrayList<Vehiculo> vehiculos){
         ArrayList<String> tipos = new ArrayList<>();
         Vehiculo v;
@@ -173,11 +189,16 @@ public class UtileriaFunciones {
         }      
     }
     
+    public static boolean otorgarPermisos(Usuario usuario, Vehiculo vehiculo){
+        return vehiculo.getPropietario().getCorreo().equals(usuario.getCorreo());
+    }
+    
     public static void eliminarMiVehiculo(Usuario usuario, Vehiculo vehiculo){
         ArrayList<Vehiculo> vehiculos = Vehiculo.readFileSer();
         for(int i = 0; i < vehiculos.size(); i++){
             if(vehiculo.getPlaca().equals(vehiculos.get(i).getPlaca())){
                vehiculos.remove(i);
+               eliminarImagenVehiculoEliminado(vehiculo.getPlaca());  // Eliminar foto del vehículo
             }
         }
         Vehiculo.saveListVehiculosSer((ArrayList<Vehiculo>) vehiculos);

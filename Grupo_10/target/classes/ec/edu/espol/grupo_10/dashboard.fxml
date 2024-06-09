@@ -11,6 +11,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
@@ -70,9 +71,18 @@
                                  </font>
                               </Label>
                               <Line endX="65.10000610351562" endY="-1.52587890625E-5" layoutX="117.0" layoutY="151.0" startX="-100.0" stroke="#eaedef" />
-                              <Button fx:id="btnSeccionPrincipal" layoutX="10.0" layoutY="167.0" mnemonicParsing="false" onAction="#cambiarPestañas" prefHeight="30.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="🏠 Principal" />
-                              <Button fx:id="btnSeccionVer" layoutX="10.0" layoutY="197.0" mnemonicParsing="false" onAction="#cambiarPestañas" prefHeight="30.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="🚗 Vehículos" />
-                              <Button fx:id="btnSeccionAgregar" layoutX="10.0" layoutY="227.0" mnemonicParsing="false" onAction="#cambiarPestañas" prefHeight="30.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="✚ Agregar vehículo" />
+                              <Button fx:id="btnSeccionPrincipal" layoutX="10.0" layoutY="167.0" mnemonicParsing="false" onAction="#cambiarPestañas" prefHeight="30.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="🏠 Principal">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
+                              <Button fx:id="btnSeccionVer" layoutX="10.0" layoutY="197.0" mnemonicParsing="false" onAction="#cambiarPestañas" prefHeight="30.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="🚗 Vehículos">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
+                              <Button fx:id="btnSeccionAgregar" layoutX="10.0" layoutY="227.0" mnemonicParsing="false" onAction="#cambiarPestañas" prefHeight="30.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="✚ Agregar vehículo">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
                               <Text fill="#eaedef" layoutX="17.0" layoutY="436.0" onMouseClicked="#fnCerrarSesion" strokeType="OUTSIDE" strokeWidth="0.0" text="➲">
                                  <font>
                                     <Font size="30.0" />
@@ -90,6 +100,11 @@
                                     <Font name="Arial Rounded MT Bold" size="12.0" />
                                  </font>
                               </Label>
+                              <Button fx:id="btnFavoritos" layoutX="10.0" layoutY="257.0" mnemonicParsing="false" onAction="#cambiarPestañas" prefHeight="30.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="🌟 Favoritos">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
                            </children>
                         </AnchorPane>
                      </children>
@@ -161,36 +176,36 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
-                                    <Label alignment="BOTTOM_LEFT" layoutX="252.0" layoutY="236.0" prefHeight="18.0" prefWidth="70.0" text="Tipo:">
+                                    <Label alignment="BOTTOM_LEFT" layoutX="252.0" layoutY="230.0" prefHeight="18.0" prefWidth="70.0" text="Tipo:">
                                        <font>
                                           <Font name="Arial Rounded MT Bold" size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="BOTTOM_LEFT" layoutX="252.0" layoutY="267.0" prefHeight="18.0" prefWidth="70.0" text="Marca:">
+                                    <Label alignment="BOTTOM_LEFT" layoutX="252.0" layoutY="260.0" prefHeight="18.0" prefWidth="70.0" text="Marca:">
                                        <font>
                                           <Font name="Arial Rounded MT Bold" size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="BOTTOM_LEFT" layoutX="252.0" layoutY="298.0" prefHeight="18.0" prefWidth="70.0" text="Modelo:">
+                                    <Label alignment="BOTTOM_LEFT" layoutX="252.0" layoutY="291.0" prefHeight="18.0" prefWidth="70.0" text="Modelo:">
                                        <font>
                                           <Font name="Arial Rounded MT Bold" size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="BOTTOM_LEFT" layoutX="252.0" layoutY="329.0" prefHeight="18.0" prefWidth="70.0" text="Precio:">
+                                    <Label alignment="BOTTOM_LEFT" layoutX="252.0" layoutY="322.0" prefHeight="18.0" prefWidth="70.0" text="Precio:">
                                        <font>
                                           <Font name="Arial Rounded MT Bold" size="14.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="cbxFTipo" layoutX="332.0" layoutY="234.0" prefHeight="26.0" prefWidth="130.0" promptText="Elige un tipo" />
-                                    <ComboBox fx:id="cbxFMarca" layoutX="332.0" layoutY="265.0" prefHeight="26.0" prefWidth="130.0" promptText="Elige una marca" />
-                                    <ComboBox fx:id="cbxFModelo" layoutX="332.0" layoutY="296.0" prefHeight="26.0" prefWidth="130.0" promptText="Elige un modelo" />
-                                    <ComboBox fx:id="cbxFPrecio" layoutX="332.0" layoutY="327.0" prefHeight="26.0" prefWidth="130.0" promptText="Rango de precio" />
-                                    <Button layoutX="257.0" layoutY="373.0" mnemonicParsing="false" onMouseClicked="#fnFiltrar" prefHeight="38.0" prefWidth="88.0" style="-fx-background-color: #1c2833;" text="Filtrar" textFill="WHITE">
+                                    <ComboBox fx:id="cbxFTipo" layoutX="332.0" layoutY="226.0" prefHeight="23.0" prefWidth="130.0" promptText="Elige un tipo" />
+                                    <ComboBox fx:id="cbxFMarca" layoutX="332.0" layoutY="257.0" prefHeight="23.0" prefWidth="130.0" promptText="Elige una marca" />
+                                    <ComboBox fx:id="cbxFModelo" layoutX="332.0" layoutY="288.0" prefHeight="23.0" prefWidth="130.0" promptText="Elige un modelo" />
+                                    <ComboBox fx:id="cbxFPrecio" layoutX="332.0" layoutY="319.0" prefHeight="23.0" prefWidth="130.0" promptText="Rango de precio" />
+                                    <Button layoutX="264.0" layoutY="390.0" mnemonicParsing="false" onMouseClicked="#fnFiltrar" prefHeight="23.0" prefWidth="88.0" style="-fx-background-color: #1c2833;" text="Filtrar" textFill="WHITE">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Button>
-                                    <Button layoutX="358.0" layoutY="373.0" mnemonicParsing="false" onMouseClicked="#fnLimpiarFiltro" prefHeight="38.0" prefWidth="88.0" style="-fx-background-color: #1c2833;" text="Limpiar" textFill="WHITE">
+                                    <Button layoutX="365.0" layoutY="390.0" mnemonicParsing="false" onMouseClicked="#fnLimpiarFiltro" prefHeight="23.0" prefWidth="88.0" style="-fx-background-color: #1c2833;" text="Limpiar" textFill="WHITE">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
@@ -200,6 +215,22 @@
                                           <Text fx:id="txtAreaInfo" layoutX="6.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="218.13674926757812" />
                                        </children>
                                     </AnchorPane>
+                                    <Button fx:id="btnComprar" layoutX="32.0" layoutY="334.0" mnemonicParsing="false" onMouseClicked="#fnComprarVehiculo" prefHeight="23.0" prefWidth="168.0" style="-fx-background-color: red;" text="Comprar" textAlignment="CENTER" textFill="WHITE">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                    <Button fx:id="btnAñadirFavorito" layoutX="32.0" layoutY="364.0" mnemonicParsing="false" onMouseClicked="#fnAñadirFavorito" prefHeight="23.0" prefWidth="168.0" style="-fx-background-color: yellow;" text="Añadir a favoritos" textAlignment="CENTER">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                    <Label alignment="BOTTOM_LEFT" layoutX="253.0" layoutY="352.0" prefHeight="18.0" prefWidth="70.0" text="Km:">
+                                       <font>
+                                          <Font name="Arial Rounded MT Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="cbxFKilometraje" layoutX="333.0" layoutY="349.0" prefHeight="23.0" prefWidth="130.0" promptText="Rango de kilometros" />
                                  </children>
                               </AnchorPane>
                            </children></AnchorPane>
@@ -338,6 +369,57 @@
                                     <Font name="Arial Rounded MT Bold" size="9.0" />
                                  </font>
                               </Text>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="dashboardFavoritos" layoutX="5.0" prefHeight="449.6" prefWidth="500.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <AnchorPane layoutX="11.0" layoutY="11.0" prefHeight="426.0" prefWidth="478.0" stylesheets="@dashboardDesign.css">
+                                 <styleClass>
+                                    <String fx:value="white-bg" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                                 <children>
+                                    <AnchorPane layoutX="10.0" prefHeight="38.0" prefWidth="458.0">
+                                       <children>
+                                          <Label layoutX="3.0" layoutY="1.0" text="🌟" textFill="#eacf03">
+                                             <font>
+                                                <Font size="25.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="37.0" layoutY="10.0" text="Favoritos" textFill="#1c2833">
+                                             <font>
+                                                <Font name="Arial Rounded MT Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane layoutX="14.0" layoutY="47.0" prefHeight="223.0" prefWidth="452.0">
+                                       <children>
+                                          <Label fx:id="lblMDefault" layoutX="128.0" layoutY="104.0" text="No tiene favoritos por el momento" textFill="#0000006e">
+                                             <font>
+                                                <Font name="Arial Rounded MT Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox fx:id="hbPrincipal" layoutX="14.0" layoutY="14.0" prefHeight="223.2" prefWidth="452.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Button fx:id="btnQuitarFavorito" layoutX="298.0" layoutY="290.0" mnemonicParsing="false" onMouseClicked="#fnEliminarFavorito" prefHeight="23.0" prefWidth="168.0" style="-fx-background-color: black;" text="Quitar de favoritos" textFill="WHITE">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                    <Button layoutX="298.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#fnComprarFavorito" prefHeight="23.0" prefWidth="168.0" style="-fx-background-color: red;" text="Comprar" textFill="WHITE">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                    <AnchorPane layoutX="14.0" layoutY="240.0" prefHeight="164.0" prefWidth="255.0">
+                                       <children>
+                                          <Text fx:id="txtInfoFavorito" layoutX="3.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="JUSTIFY" wrappingWidth="249.33673095703125" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                      </children>
