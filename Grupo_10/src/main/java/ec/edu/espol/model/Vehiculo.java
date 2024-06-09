@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -37,6 +38,21 @@ public class Vehiculo implements Serializable{
     @Override
     public String toString() {
         return "Vehiculo{" + "placa=" + placa + ", marca=" + marca + ", modelo=" + modelo + ", tipo=" + tipo + ", precio=" + precio + ", kilometraje=" + kilometraje + ", propietario=" + propietario + '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Vehiculo other = (Vehiculo) obj;
+        return Objects.equals(this.placa, other.placa);
     }
     
     public static void saveListVehiculosSer(ArrayList<Vehiculo> vehiculos){

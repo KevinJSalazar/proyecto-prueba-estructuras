@@ -2,6 +2,7 @@ module ec.edu.espol.grupo_10 {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.base;
+    requires java.mail;
 
     opens ec.edu.espol.grupo_10 to javafx.fxml;
     exports ec.edu.espol.grupo_10;

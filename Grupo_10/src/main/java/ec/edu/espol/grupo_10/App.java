@@ -12,54 +12,80 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Random;
 import static javafx.application.Application.launch;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
 
+    private double xOffset = 0;
+    private double yOffset = 0;
+    
     private static Scene scene;
+    private static Stage st;
+
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        st = stage;
+        scene = new Scene(loadFXML("login").load(), 700, 500);
+        stage.initStyle(StageStyle.UNDECORATED);
+        
+        scene.setOnMousePressed((MouseEvent event) -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        
+        scene.setOnMouseDragged((MouseEvent event) -> {
+            stage.setX(event.getScreenX()- xOffset);
+            stage.setY(event.getScreenY()- yOffset);
+        });
+        
         stage.setScene(scene);
         stage.show();
     }
-
-    public static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        
+    public static Stage getStage(){
+        return st;
     }
-
-    public static Parent loadFXML(String fxml) throws IOException {
+    
+    public static void setRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml).load());
+    }
+    
+    public static FXMLLoader loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        return fxmlLoader;
+    }
+    public static void setScene(Scene sc) throws IOException {
+        st.setScene(sc);
     }
 
     public static void main(String[] args) {
         ArrayList<Vehiculo> vehiculos = new ArrayList<>();
         
+        Usuario u0 = new Usuario("", "", "a", "a");
         Usuario u1 = new Usuario("Kevin", "Salazar", "yope@gmail.com", "123");
         Usuario u2 = new Usuario("Steven", "Lino", "peyo@gmail.com", "456");
         
         Usuario[] usuarios = {u1, u2};
-        String[] placas = {"AAA", "BBB", "CCC", "DDD", "EEE"};
         String[] marcas = {"TOYOTA", "NISAN", "CHEVROLET", "HONDA"};
-        String[] modelos = {"GRANDE", "PEQUEÑO", "MEDIANO"};
-        String[] tipos = {"RAPIDO", "PESADO", "ROBUSTO", "INTELIGENTE"};
+        String[] modelos = {"GRANDE", "PEQUEÑO", "MEDIANO", "SUPER"};
+        String[] tipos = {"Camioneta", "Carro", "Moto"};
         
         String placa, marca, modelo, tipo;
         int precio; int kilometraje;
         Usuario usuario; Vehiculo vehiculo;
         for (int i = 1; i <= 20; i++){
-            placa = placas[new Random().nextInt(placas.length)];
             marca = marcas[new Random().nextInt(marcas.length)];
             modelo = modelos[new Random().nextInt(modelos.length)];
             tipo = tipos[new Random().nextInt(tipos.length)];
             usuario = usuarios[new Random().nextInt(usuarios.length)];
-            precio = new Random().nextInt(20);
+            precio = new Random().nextInt(19);
             kilometraje = new Random().nextInt(20);
-            vehiculo = new Vehiculo(placa, marca, modelo, tipo, precio, kilometraje, usuario);
+            vehiculo = new Vehiculo(""+i, marca, modelo, tipo, precio+1, kilometraje, usuario);
             vehiculos.addLast(vehiculo);
             usuario.getVehiculos().addLast(vehiculo);
         }
@@ -83,6 +109,7 @@ public class App extends Application {
         ArrayList<Usuario> usuariosAL = new ArrayList<>();
         usuariosAL.addLast(u1);
         usuariosAL.addLast(u2);
+        usuariosAL.addLast(u0);
         Vehiculo.saveListVehiculosSer(vehiculos);
         Usuario.saveListUsuariosSer(usuariosAL);
         

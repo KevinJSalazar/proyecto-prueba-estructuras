@@ -4,7 +4,7 @@
  */
 package ec.edu.espol.util;
 
-//import ec.edu.espol.controllers.DashboardController;
+import ec.edu.espol.controllers.DashboardController;
 import ec.edu.espol.grupo_10.App;
 import ec.edu.espol.model.ArrayList;
 import ec.edu.espol.model.Usuario;
@@ -39,33 +39,33 @@ public class UtileriaFunciones {
         stage.close();
     }
     
-//    public static void cambiarEscena(Event event, String fxml){
-//        try{
-//            FXMLLoader loader = App.loadFXML(fxml);
-//            Scene sc = new Scene(loader.load(), 700, 500);
-//            App.setScene(sc);
-//        } catch(IOException ex){}
-//    }
-//    
-//    public static void cambiarEscena(String fxml){
-//        
-//        try{
-//            FXMLLoader loader = App.loadFXML(fxml);
-//            Scene sc = new Scene(loader.load(), 700, 500);   
-//            App.setScene(sc);
-//        } catch(IOException ex){}
-//    }
+    public static void cambiarEscena(Event event, String fxml){
+        try{
+            FXMLLoader loader = App.loadFXML(fxml);
+            Scene sc = new Scene(loader.load(), 700, 500);
+            App.setScene(sc);
+        } catch(IOException ex){}
+    }
+    
+    public static void cambiarEscena(String fxml){
+        
+        try{
+            FXMLLoader loader = App.loadFXML(fxml);
+            Scene sc = new Scene(loader.load(), 700, 500);   
+            App.setScene(sc);
+        } catch(IOException ex){}
+    }
     
     
-//    public static void cambiarDashboardPrincipal(Usuario usuario){
-//        try{
-//            FXMLLoader loader = App.loadFXML("dashboard");
-//            Scene sc = new Scene(loader.load(), 700, 500);
-//            DashboardController controlador = loader.getController();
-//            controlador.setUsuario(usuario);
-//            App.setScene(sc);
-//        } catch(IOException ex){}
-//    }
+    public static void cambiarDashboardPrincipal(Usuario usuario){
+        try{
+            FXMLLoader loader = App.loadFXML("dashboard");
+            Scene sc = new Scene(loader.load(), 700, 500);
+            DashboardController controlador = loader.getController();
+            controlador.setUsuario(usuario);
+            App.setScene(sc);
+        } catch(IOException ex){}
+    }
     
     public static boolean verificarCondiciones(Boolean b){
         return b == false;
@@ -152,18 +152,18 @@ public class UtileriaFunciones {
     
     public static int contarTipos(ArrayList<Vehiculo> vehiculos, String tipo){
         int contabilizado = 0;
-        for (int i = 0; i < vehiculos.size(); i++){
-            if(vehiculos.get(i).getTipo().equals(tipo))
+        for (Vehiculo v : vehiculos){
+            if(v.getTipo().equals(tipo))
                 contabilizado++;
         }
         return contabilizado;
     }
     
-    public static void actualizar(Usuario usuario, Vehiculo vehiculo){
-        ArrayList<Vehiculo> vehiculosUsuario = usuario.getVehiculos();
-        vehiculosUsuario.addLast(vehiculo);
-        usuario.setVehiculos((ArrayList<Vehiculo>) vehiculosUsuario);
-    }
+//    public static void actualizar(Usuario usuario, Vehiculo vehiculo){
+//        ArrayList<Vehiculo> vehiculosUsuario = usuario.getVehiculos();
+//        vehiculosUsuario.addLast(vehiculo);
+//        usuario.setVehiculos((ArrayList<Vehiculo>) vehiculosUsuario);
+//    }
     
     public static void verificarPertenencia(Usuario usuario, Vehiculo vehiculo, Button btn){
         if(vehiculo.getPropietario().getCorreo().equals(usuario.getCorreo())){
@@ -180,7 +180,6 @@ public class UtileriaFunciones {
                vehiculos.remove(i);
             }
         }
-        
         Vehiculo.saveListVehiculosSer((ArrayList<Vehiculo>) vehiculos);
         
         for(int i = 0; i < usuario.getVehiculos().size(); i++){
@@ -188,7 +187,6 @@ public class UtileriaFunciones {
             if(vehiculo.getPlaca().equals(vehiculosUsuario.get(i).getPlaca())){
                 vehiculosUsuario.remove(i);
             }
-            usuario.setVehiculos((ArrayList<Vehiculo>) vehiculosUsuario);
         }
     }
 }

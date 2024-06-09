@@ -81,12 +81,23 @@ public class ArrayList<E> implements List<E>, Iterable<E>, Serializable{
         if(isEmpty()|| index<0 || index>=effectiveSize){
             throw new IndexOutOfBoundsException();
         }
-        for(int i=index;i<effectiveSize;i++){
+        for(int i=index;i<effectiveSize-1;i++){
             elements[i]=elements[i+1];
         }
         effectiveSize--;
         return eremove;
     }
+    
+//    public E remove(E e){
+//        E eremove = null;
+//        if(e!=null){
+//            for(int i=0;i<effectiveSize;i++){
+//                if(e.equals(elements[i]))
+//                    eremove = remove(i);
+//            }
+//        }
+//        return eremove;
+//    }
 
     @Override
     public boolean isEmpty() {
