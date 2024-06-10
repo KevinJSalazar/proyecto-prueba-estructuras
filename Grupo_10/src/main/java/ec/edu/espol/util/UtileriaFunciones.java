@@ -123,8 +123,10 @@ public class UtileriaFunciones {
     
     public static void eliminarImagenVehiculoEliminado(String placa){
         String nombreImagen = placa+".png";
-        String directorioProyecto = System.getProperty("user.dir");
-        Path rutaImagen = Paths.get(directorioProyecto, "imagenesVehiculos", nombreImagen);
+//        String directorioProyecto = System.getProperty("user.dir");
+        String rutaProyecto = System.getProperty("user.dir")+File.separator+"src"+File.separator+"main"+File.separator+"resources";
+        String directorioProyecto = rutaProyecto + File.separator + "imagenesVehiculos";        
+        Path rutaImagen = Paths.get(directorioProyecto, nombreImagen);
         Path pathImagen = Paths.get(rutaImagen.toString());
         try{
             if(Files.exists(pathImagen)){

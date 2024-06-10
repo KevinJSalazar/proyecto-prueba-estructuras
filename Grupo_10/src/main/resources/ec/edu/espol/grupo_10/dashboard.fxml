@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -258,11 +259,21 @@
                                                 <TableColumn fx:id="tvColKm" prefWidth="81.60003662109375" text="Km" />
                                             </columns>
                                           </TableView>
-                                          <Text fill="#1c2833" layoutX="83.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vehículos en Optimus Prime Motors">
+                                          <Text fill="#1c2833" layoutX="10.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Optimus Prime Motors">
                                              <font>
                                                 <Font name="Arial Black" size="16.0" />
                                              </font>
                                           </Text>
+                                          <Button layoutX="258.0" layoutY="5.0" mnemonicParsing="false" onMouseClicked="#fnOrdenarPorPrecio" prefHeight="23.0" prefWidth="100.0" style="-fx-background-color: green;" text="Precio" textFill="WHITE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Button>
+                                          <Button layoutX="370.0" layoutY="5.0" mnemonicParsing="false" onMouseClicked="#fnOrdenarPorKilometraje" prefHeight="23.0" prefWidth="100.0" style="-fx-background-color: purple;" text="KIlometraje" textFill="WHITE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Button>
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane layoutX="14.0" layoutY="238.0" prefHeight="166.0" prefWidth="200.0" stylesheets="@dashboardDesign.css">
@@ -395,12 +406,16 @@
                                     </AnchorPane>
                                     <AnchorPane layoutX="14.0" layoutY="47.0" prefHeight="223.0" prefWidth="452.0">
                                        <children>
+                                          <ScrollPane prefHeight="223.0" prefWidth="452.0" vbarPolicy="NEVER">
+                                             <content>
+                                                <HBox fx:id="hbPrincipal" prefHeight="223.0" prefWidth="452.0" />
+                                             </content>
+                                          </ScrollPane>
                                           <Label fx:id="lblMDefault" layoutX="128.0" layoutY="104.0" text="No tiene favoritos por el momento" textFill="#0000006e">
                                              <font>
                                                 <Font name="Arial Rounded MT Bold" size="12.0" />
                                              </font>
                                           </Label>
-                                          <HBox fx:id="hbPrincipal" layoutX="14.0" layoutY="14.0" prefHeight="223.2" prefWidth="452.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
                                     <Button fx:id="btnQuitarFavorito" layoutX="298.0" layoutY="290.0" mnemonicParsing="false" onMouseClicked="#fnEliminarFavorito" prefHeight="23.0" prefWidth="168.0" style="-fx-background-color: black;" text="Quitar de favoritos" textFill="WHITE">
@@ -413,7 +428,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Button>
-                                    <AnchorPane layoutX="14.0" layoutY="240.0" prefHeight="164.0" prefWidth="255.0">
+                                    <AnchorPane layoutX="14.0" layoutY="280.0" prefHeight="139.0" prefWidth="255.0">
                                        <children>
                                           <Text fx:id="txtInfoFavorito" layoutX="3.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="JUSTIFY" wrappingWidth="249.33673095703125" />
                                        </children>

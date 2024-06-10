@@ -558,9 +558,9 @@ public class DashboardController implements Initializable {
             Usuario vendedor = Usuario.filtrarUsuario(usuarios, v.getPropietario().getCorreo());
             UtileriaFunciones.eliminarMiVehiculo(vendedor, v);
             Usuario.saveListUsuariosSer(usuarios);
-            String cuerpo = "El propietario del vehículo:\n" + v.getMarca() + " " + v.getModelo() + " - Placa: " + v.getPlaca() + " - Recorrido: " + v.getKilometraje() + "\nHa aceptado tu oferta de: " + v.getPrecio();
-            UtileriaMensajes.sendMensaje(vendedor.getCorreo(), "¡Una de sus ofertas ha sido aceptada!", cuerpo + "\nCorreo del propietario: " + usuarioActual.getCorreo());
-            UtileriaMensajes.generarAlertaInfo("!Compra realizada¡", "¡Se ha informado con éxito al vendedor de su compra!");
+            String cuerpo = "El propietario del vehículo:\n" + v.getMarca() + " " + v.getModelo() + " - Placa: " + v.getPlaca() + " - Recorrido: " + v.getKilometraje() + "\nHa aceptado tu compra por: " + v.getPrecio();
+            UtileriaMensajes.sendMensaje(vendedor.getCorreo(), "¡Tu compra se ha realizado con éxito!", cuerpo + "\nCorreo del propietario: " + usuarioActual.getCorreo());
+            UtileriaMensajes.generarAlertaInfo("¡Compra realizada!", "¡Se ha informado con éxito al vendedor de su compra!");
             actualizarContabilidad(vehiculos);
             return true;
         } else {
@@ -574,7 +574,7 @@ public class DashboardController implements Initializable {
         comprarVehiculo(vehiculoActual);
     }
     
-    private void eliminarVehiculoFavorito(Vehiculo v){ //no elimina
+    private void eliminarVehiculoFavorito(Vehiculo v){ //no elimina // Pipipi
         try {
             usuarioActual.getVehiculos().remove(v);
             Usuario.saveListUsuariosSer(usuarios);
@@ -594,7 +594,7 @@ public class DashboardController implements Initializable {
         if(comprarVehiculo(vehiculoActual)){
             eliminarVehiculoFavorito(vehiculoActual);
         } else{
-            UtileriaMensajes.generarAlertaError("Ha ocurrido un error", "Parece que aun no es momento de comprar este vehículo");
+//            UtileriaMensajes.generarAlertaError("Ha ocurrido un error", "Parece que aun no es momento de comprar este vehículo");
         }
     }
 
@@ -603,8 +603,61 @@ public class DashboardController implements Initializable {
         if(!usuarioActual.getFavoritos().contains(vehiculoActual)){
             usuarioActual.getFavoritos().addLast(vehiculoActual);
             UtileriaMensajes.generarAlertaInfo("Vehiculo favorito", "Se ha añadio el vehiculo de placa: " + vehiculoActual.getPlaca() + " a su lista de favoritos");
+            cargarFavoritos();
         } else{
             UtileriaMensajes.generarAlertaError("¿De nuevo?", "Ya tiene este vehículo en su lista de favoritos");
         }
+        
+        
+    }
+    
+    private void cargarFavoritos(){
+        ArrayList<Vehiculo> vFavoritos = usuarioActual.getFavoritos();
+        hbPrincipal.setSpacing(2);
+        if(vFavoritos.size() > 0){
+            lblMDefault.setText(null);
+            hbPrincipal.getChildren().clear();
+            
+            for(int i = 0; i < vFavoritos.size(); i++){
+                Vehiculo v = vFavoritos.get(i);
+                VBox vbox = new VBox(2);
+                String nombreImagen = v.getPlaca()+".png";
+                String rutaProyecto = System.getProperty("user.dir")+File.separator+"src"+File.separator+"main"+File.separator+"resources";
+                String directorioProyecto = rutaProyecto + File.separator + "imagenesVehiculos";  
+                File file = new File(directorioProyecto, nombreImagen);
+                ImageView imv = new ImageView();
+                if(file.exists()){
+                    Image imagen = new Image(file.toURI().toString());
+                    imagen = ajustarTamañoImagen(imagen, imv.getFitWidth(), imv.getFitHeight());
+                    imv.setImage(imagen);
+                } else{
+                    imv.setImage(null);
+                }
+                
+                String infoPrevia = v.getMarca().toUpperCase()+" "+v.getModelo()+"\n $"+String.valueOf(v.getPrecio());
+                Text text = new Text(infoPrevia);
+                vbox.getChildren().addAll(imv, text);
+                VBox.setMargin(imv, new Insets(2));
+                VBox.setMargin(text, new Insets(2));
+                HBox.setMargin(vbox, new Insets(2));
+                
+                hbPrincipal.getChildren().add(vbox);
+                
+                vbox.setOnMouseClicked(event -> {
+                    String info = UtileriaFunciones.crearMensajeAuto(v.getTipo(), v.getPlaca(), v.getMarca(), v.getModelo(), v.getPrecio(), v.getKilometraje());
+                    txtInfoFavorito.setText(info);
+                });
+            }
+        } else{
+            lblMDefault.setText("No tiene favoritos por el momento");
+        }
+    }
+
+    @FXML
+    private void fnOrdenarPorPrecio(MouseEvent event) {
+    }
+
+    @FXML
+    private void fnOrdenarPorKilometraje(MouseEvent event) {
     }
 }
