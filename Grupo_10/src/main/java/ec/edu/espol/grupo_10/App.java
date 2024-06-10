@@ -64,54 +64,54 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        ArrayList<Vehiculo> vehiculos = new ArrayList<>();
-        
-        Usuario u0 = new Usuario("", "", "a", "a");
-        Usuario u1 = new Usuario("Kevin", "Salazar", "yope@gmail.com", "123");
-        Usuario u2 = new Usuario("Steven", "Lino", "peyo@gmail.com", "456");
-        
-        Usuario[] usuarios = {u1, u2};
-        String[] marcas = {"TOYOTA", "NISAN", "CHEVROLET", "HONDA"};
-        String[] modelos = {"GRANDE", "PEQUEÑO", "MEDIANO", "SUPER"};
-        String[] tipos = {"Camioneta", "Carro", "Moto"};
-        
-        String placa, marca, modelo, tipo;
-        int precio; int kilometraje;
-        Usuario usuario; Vehiculo vehiculo;
-        for (int i = 1; i <= 20; i++){
-            marca = marcas[new Random().nextInt(marcas.length)];
-            modelo = modelos[new Random().nextInt(modelos.length)];
-            tipo = tipos[new Random().nextInt(tipos.length)];
-            usuario = usuarios[new Random().nextInt(usuarios.length)];
-            precio = new Random().nextInt(19);
-            kilometraje = new Random().nextInt(20);
-            vehiculo = new Vehiculo(""+i, marca, modelo, tipo, precio+1, kilometraje, usuario);
-            vehiculos.addLast(vehiculo);
-            usuario.getVehiculos().addLast(vehiculo);
-        }
-        for(Vehiculo v : vehiculos){
-            System.out.println(v);
-        }
-        
-        System.out.println("//////////////////");
-        
-        ArrayList<Vehiculo> vehfiltrados = Vehiculo.filtrarVehiculos(vehiculos, "", "TOYOTA", "", 1, 20, 0, 20);
-        for(Vehiculo v : vehfiltrados){
-            System.out.println(v);
-        }
-        
-        System.out.println("//////////////////");
-        
-        for(Vehiculo v : u1.getVehiculos()){
-            System.out.println(v);
-        }
-        
-        ArrayList<Usuario> usuariosAL = new ArrayList<>();
-        usuariosAL.addLast(u1);
-        usuariosAL.addLast(u2);
-        usuariosAL.addLast(u0);
-        Vehiculo.saveListVehiculosSer(vehiculos);
-        Usuario.saveListUsuariosSer(usuariosAL);
+//        ArrayList<Vehiculo> vehiculos = new ArrayList<>();
+//        
+//        Usuario u0 = new Usuario("", "", "a", "a");
+//        Usuario u1 = new Usuario("Kevin", "Salazar", "yope@gmail.com", "123");
+//        Usuario u2 = new Usuario("Steven", "Lino", "peyo@gmail.com", "456");
+//        
+//        Usuario[] usuarios = {u1, u2};
+//        String[] marcas = {"TOYOTA", "NISAN", "CHEVROLET", "HONDA"};
+//        String[] modelos = {"GRANDE", "PEQUEÑO", "MEDIANO", "SUPER"};
+//        String[] tipos = {"Camioneta", "Carro", "Moto"};
+//        
+//        String placa, marca, modelo, tipo;
+//        int precio; int kilometraje;
+//        Usuario usuario; Vehiculo vehiculo;
+//        for (int i = 1; i <= 20; i++){
+//            marca = marcas[new Random().nextInt(marcas.length)];
+//            modelo = modelos[new Random().nextInt(modelos.length)];
+//            tipo = tipos[new Random().nextInt(tipos.length)];
+//            usuario = usuarios[new Random().nextInt(usuarios.length)];
+//            precio = new Random().nextInt(19);
+//            kilometraje = new Random().nextInt(20);
+//            vehiculo = new Vehiculo(""+i, marca, modelo, tipo, precio+1, kilometraje, usuario);
+//            vehiculos.addLast(vehiculo);
+//            usuario.getVehiculos().addLast(vehiculo);
+//        }
+//        for(Vehiculo v : vehiculos){
+//            System.out.println(v);
+//        }
+//        
+//        System.out.println("//////////////////");
+//        
+//        ArrayList<Vehiculo> vehfiltrados = Vehiculo.filtrarVehiculos(vehiculos, "", "TOYOTA", "", 1, 20, 0, 20);
+//        for(Vehiculo v : vehfiltrados){
+//            System.out.println(v);
+//        }
+//        
+//        System.out.println("//////////////////");
+//        
+//        for(Vehiculo v : u1.getVehiculos()){
+//            System.out.println(v);
+//        }
+//        
+//        ArrayList<Usuario> usuariosAL = new ArrayList<>();
+//        usuariosAL.addLast(u1);
+//        usuariosAL.addLast(u2);
+//        usuariosAL.addLast(u0);
+//        Vehiculo.saveListVehiculosSer(vehiculos);
+//        Usuario.saveListUsuariosSer(usuariosAL);
         
         launch();
     }
