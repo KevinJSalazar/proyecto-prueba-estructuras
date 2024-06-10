@@ -21,6 +21,7 @@ public class Usuario implements Serializable{
     private String correo;
     private String clave;
     private ArrayList<Vehiculo> vehiculos;
+    private ArrayList<Vehiculo> vehFavoritos;
 
     
     public Usuario(String nombre, String apellido, String correo, String clave) {
@@ -29,6 +30,7 @@ public class Usuario implements Serializable{
         this.correo = correo;
         this.clave = clave;
         this.vehiculos = new ArrayList<>();
+        this.vehFavoritos = new ArrayList<>();
     }
 
     @Override
@@ -128,6 +130,14 @@ public class Usuario implements Serializable{
 
     public void setVehiculos(ArrayList<Vehiculo> vehiculos) {
         this.vehiculos = vehiculos;
+    }
+
+    public ArrayList<Vehiculo> getFavoritos() {
+        return vehFavoritos;
+    }
+
+    public void setFavoritos(ArrayList<Vehiculo> vehFavoritos) {
+        this.vehFavoritos = vehFavoritos;
     }
     
     

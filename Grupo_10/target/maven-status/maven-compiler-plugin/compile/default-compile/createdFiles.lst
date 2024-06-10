@@ -6,8 +6,6 @@ ec\edu\espol\controllers\DashboardController.class
 ec\edu\espol\model\Vehiculo.class
 ec\edu\espol\util\UtileriaMensajes.class
 ec\edu\espol\model\List.class
-ec\edu\espol\controllers\PrimaryController.class
-ec\edu\espol\controllers\SecondaryController.class
 module-info.class
 ec\edu\espol\grupo_10\App.class
 ec\edu\espol\model\Usuario.class
