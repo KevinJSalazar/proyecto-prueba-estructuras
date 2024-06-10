@@ -212,4 +212,14 @@ public class UtileriaFunciones {
             }
         }
     }
+    
+    public static void eliminarVfavorito(Usuario usuario, Vehiculo vehiculo){
+        ArrayList<Vehiculo> lFavoritos = usuario.getFavoritos();
+        for(int i = 0; i < lFavoritos.size(); i++){
+            if(vehiculo.getPlaca().equals(lFavoritos.get(i).getPlaca())){
+                lFavoritos.remove(i);
+                usuario.setFavoritos(lFavoritos);
+            }
+        }
+    }
 }

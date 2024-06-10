@@ -106,6 +106,7 @@ public class DashboardController implements Initializable {
     private Usuario usuarioActual;
     private Vehiculo vehiculoSeleccionadoActual;
     private Vehiculo vehiculoActual;
+    private Vehiculo vehiculoFavoritoActual;
     FileChooser fc = new FileChooser();
     private File imgFile;
     private File imgCargarFile;
@@ -432,7 +433,7 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    private void fnActualizarInfoVehiculo(MouseEvent event) {
+    private void fnActualizarInfoVehiculo(MouseEvent event) throws IOException {
         String placa = (String)this.txtPlaca.getText();
         if (!Vehiculo.checkPlaca(usuarioActual.getVehiculos(), placa)){
             UtileriaMensajes.generarAlertaError("Valores no permitidos", "No tiene un vehículo con la placa: " + placa);
@@ -467,6 +468,12 @@ public class DashboardController implements Initializable {
                 vehiculoAct.setPrecio(precion);
                 vehiculoAct2.setPrecio(precion);
             } 
+            
+           if(imgCargarFile != null){
+                UtileriaFunciones.eliminarImagenVehiculoEliminado(placa);
+                UtileriaFunciones.guardarImagen(imgCargarFile, placa);
+           } else{}
+            
             try{
                 Vehiculo.saveListVehiculosSer(vehiculos);
                 Usuario.saveListUsuariosSer(usuarios);
@@ -580,38 +587,44 @@ public class DashboardController implements Initializable {
     }
     
 
-    private void eliminarVehiculoFavorito(Vehiculo v){
-//        try {
-//            for(int i = 0; i < usuarioActual.getFavoritos().size(); i++){
-//                if(v.equals(usuarioActual.getFavoritos().get(i)))
-//                    usuarioActual.getFavoritos().remove(i);
-//            }
-//            Usuario.saveListUsuariosSer(usuarios);
-//            UtileriaMensajes.generarAlertaInfo("Vehiculo retirado", "Se ha quitado el vehiculo de placa: " + v.getPlaca() + " de su lista de favoritos");
-//        } catch (Exception e) {
-//            UtileriaMensajes.generarAlertaError("Ha ocurrido un error", "Este vehiculo ya no se encuentra en su lista de favoritos");
-//        }
-
-    }
+//    private void eliminarVehiculoFavorito(Vehiculo v){
+////        try {
+////            for(int i = 0; i < usuarioActual.getFavoritos().size(); i++){
+////                if(v.equals(usuarioActual.getFavoritos().get(i)))
+////                    usuarioActual.getFavoritos().remove(i);
+////            }
+////            Usuario.saveListUsuariosSer(usuarios);
+////            UtileriaMensajes.generarAlertaInfo("Vehiculo retirado", "Se ha quitado el vehiculo de placa: " + v.getPlaca() + " de su lista de favoritos");
+////        } catch (Exception e) {
+////            UtileriaMensajes.generarAlertaError("Ha ocurrido un error", "Este vehiculo ya no se encuentra en su lista de favoritos");
+////        }
+//
+//    }
 
     @FXML
     private void fnEliminarFavorito(MouseEvent event) {
-        eliminarVehiculoFavorito(vehiculoActual);
+        UtileriaFunciones.eliminarVfavorito(usuarioActual, vehiculoFavoritoActual);
+        Usuario.saveListUsuariosSer(usuarios);
+        cargarFavoritos();
     }
 
     @FXML
     private void fnComprarFavorito(MouseEvent event) {
-        if(comprarVehiculo(vehiculoActual)){
-            eliminarVehiculoFavorito(vehiculoActual);
+        if(!usuarioActual.getFavoritos().isEmpty()){
+            if(comprarVehiculo(vehiculoFavoritoActual)){
+                UtileriaFunciones.eliminarVfavorito(usuarioActual, vehiculoFavoritoActual);
+                cargarFavoritos();
+            } else{}
         } else{
-//            UtileriaMensajes.generarAlertaError("Ha ocurrido un error", "Parece que aun no es momento de comprar este vehículo");
-        }
+            UtileriaMensajes.generarAlertaError("Sin favoritos", "No tiene vehículos favoritos para comprar.");
+        }       
     }
 
     @FXML
     private void fnAñadirFavorito(MouseEvent event) {
         if(!usuarioActual.getFavoritos().contains(vehiculoActual)){
             usuarioActual.getFavoritos().addLast(vehiculoActual);
+            Usuario.saveListUsuariosSer(usuarios);
             UtileriaMensajes.generarAlertaInfo("Vehiculo favorito", "Se ha añadio el vehiculo de placa: " + vehiculoActual.getPlaca() + " a su lista de favoritos");
             cargarFavoritos();
         } else{
@@ -623,6 +636,7 @@ public class DashboardController implements Initializable {
     
     private void cargarFavoritos(){
         ArrayList<Vehiculo> vFavoritos = usuarioActual.getFavoritos();
+        vehiculoFavoritoActual = null;
         hbPrincipal.setSpacing(2);
         if(vFavoritos.size() > 0){
             lblMDefault.setText(null);
@@ -630,12 +644,16 @@ public class DashboardController implements Initializable {
             
             for(int i = 0; i < vFavoritos.size(); i++){
                 Vehiculo v = vFavoritos.get(i);
+                
                 VBox vbox = new VBox(2);
                 String nombreImagen = v.getPlaca()+".png";
                 String rutaProyecto = System.getProperty("user.dir")+File.separator+"src"+File.separator+"main"+File.separator+"resources";
                 String directorioProyecto = rutaProyecto + File.separator + "imagenesVehiculos";  
                 File file = new File(directorioProyecto, nombreImagen);
                 ImageView imv = new ImageView();
+                imv.setFitHeight(150);
+                imv.setFitWidth(150);
+                imv.setPreserveRatio(true);
                 if(file.exists()){
                     Image imagen = new Image(file.toURI().toString());
                     imagen = ajustarTamañoImagen(imagen, imv.getFitWidth(), imv.getFitHeight());
@@ -651,15 +669,20 @@ public class DashboardController implements Initializable {
                 VBox.setMargin(text, new Insets(2));
                 HBox.setMargin(vbox, new Insets(2));
                 
+                vbox.setUserData(v); // Probando
                 hbPrincipal.getChildren().add(vbox);
                 
                 vbox.setOnMouseClicked(event -> {
+                    vehiculoFavoritoActual = (Vehiculo) vbox.getUserData();
                     String info = UtileriaFunciones.crearMensajeAuto(v.getTipo(), v.getPlaca(), v.getMarca(), v.getModelo(), v.getPrecio(), v.getKilometraje());
                     txtInfoFavorito.setText(info);
                 });
             }
         } else{
-            lblMDefault.setText("No tiene favoritos por el momento");
+            hbPrincipal.getChildren().clear();
+            txtInfoFavorito.setText("");
+            lblMDefault.setText("No tiene favoritos por el momento");      
+            vehiculoFavoritoActual = null;
         }
     }
 
