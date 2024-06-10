@@ -74,19 +74,32 @@ public class ArrayList<E> implements List<E>, Iterable<E>, Serializable{
     public E removeLast() {
         return remove(effectiveSize-1);
     }
-
+    
     @Override
     public E remove(int index) {
-        E eremove=null;
-        if(isEmpty()|| index<0 || index>=effectiveSize){
+        if(isEmpty() || index < 0 || index >= effectiveSize) {
             throw new IndexOutOfBoundsException();
         }
-        for(int i=index;i<effectiveSize-1;i++){
-            elements[i]=elements[i+1];
+        E eremove = elements[index]; // Esto debe asignar el elemento que se va a eliminar
+        for(int i = index; i < effectiveSize - 1; i++) {
+            elements[i] = elements[i + 1];
         }
+        elements[effectiveSize - 1] = null; // Asegúrate de limpiar el último elemento
         effectiveSize--;
         return eremove;
     }
+//    @Override
+//    public E remove(int index) {
+//        E eremove=null;
+//        if(isEmpty()|| index<0 || index>=effectiveSize){
+//            throw new IndexOutOfBoundsException();
+//        }
+//        for(int i=index;i<effectiveSize-1;i++){
+//            elements[i]=elements[i+1];
+//        }
+//        effectiveSize--;
+//        return eremove;
+//    }
     
     public E remove(E e){
         E eremove = null;

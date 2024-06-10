@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -117,6 +119,9 @@ public class DashboardController implements Initializable {
     private int cantidadAutos;
     private int cantidadCamionetas;
     private int cantidadMotos;
+    
+    private int banderaPrecioOrdenar=0;
+    private int banderaKilometrajeOrdenar=0;
     // ATRIBUTOS NO FXML
     
     @FXML
@@ -688,9 +693,88 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void fnOrdenarPorPrecio(MouseEvent event) {
+        Comparator<Vehiculo> cmpPrecioMenor = new Comparator<>() {
+            @Override
+            public int compare(Vehiculo v1, Vehiculo v2) {
+                //menor a mayor
+                return Integer.compare(v1.getPrecio(), v2.getPrecio());
+            }
+        };
+        Comparator<Vehiculo> cmpPrecioMayor = new Comparator<>() {
+            @Override
+            public int compare(Vehiculo v1, Vehiculo v2) {
+                //menor a mayor
+                return Integer.compare(v2.getPrecio(), v1.getPrecio());
+            }
+        };
+        obListVehiculos=FXCollections.observableArrayList();
+        tvColTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        tvColPlaca.setCellValueFactory(new PropertyValueFactory<>("placa"));
+        tvColMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        tvColModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+        tvColPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        tvColKm.setCellValueFactory(new PropertyValueFactory<>("kilometraje"));
+        if(banderaPrecioOrdenar==0){
+            ordenar(vehiculos,cmpPrecioMenor);
+            banderaPrecioOrdenar=1;
+        }else{
+            ordenar(vehiculos,cmpPrecioMayor);   
+            banderaPrecioOrdenar=0;   
+        }
+        for(int i = 0; i < vehiculos.size(); i++){
+            obListVehiculos.add(vehiculos.get(i));
+        }
+        this.tvVehiculo.setItems(obListVehiculos);
+        
     }
 
     @FXML
     private void fnOrdenarPorKilometraje(MouseEvent event) {
+        Comparator<Vehiculo> cmpKilometrajeMenor = new Comparator<>() {
+            @Override
+            public int compare(Vehiculo v1, Vehiculo v2) {
+                //menor a mayor
+                return Double.compare(v1.getKilometraje(), v2.getKilometraje());
+            }
+        };
+        Comparator<Vehiculo> cmpKilometrajeMayor = new Comparator<>() {
+            @Override
+            public int compare(Vehiculo v1, Vehiculo v2) {
+                //menor a mayor
+                return Double.compare(v2.getKilometraje(), v1.getKilometraje());
+            }
+        };
+        obListVehiculos=FXCollections.observableArrayList();
+        tvColTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        tvColPlaca.setCellValueFactory(new PropertyValueFactory<>("placa"));
+        tvColMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        tvColModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+        tvColPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        tvColKm.setCellValueFactory(new PropertyValueFactory<>("kilometraje"));
+        if(banderaKilometrajeOrdenar==0){
+            ordenar(vehiculos,cmpKilometrajeMenor);
+            banderaKilometrajeOrdenar=1;
+        }else{
+            ordenar(vehiculos,cmpKilometrajeMayor);
+            banderaKilometrajeOrdenar=0;
+        }
+        
+        for(int i = 0; i < vehiculos.size(); i++){
+            obListVehiculos.add(vehiculos.get(i));
+        }
+        this.tvVehiculo.setItems(obListVehiculos);
     }
+    
+    public static ArrayList<Vehiculo> ordenar(ArrayList<Vehiculo> list,Comparator<Vehiculo> cmp){
+        Queue<Vehiculo> ordenar = new PriorityQueue<>(cmp);
+        while (!list.isEmpty()) {
+            Vehiculo objeto = list.removeLast();
+            ordenar.offer(objeto);
+        }
+        while (!ordenar.isEmpty()) {
+            list.addLast(ordenar.poll());
+        }
+        return list;
+    }
+
 }
