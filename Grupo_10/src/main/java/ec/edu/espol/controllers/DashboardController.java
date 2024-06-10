@@ -438,8 +438,7 @@ public class DashboardController implements Initializable {
             UtileriaMensajes.generarAlertaError("Valores no permitidos", "No tiene un vehículo con la placa: " + placa);
         } else{
             Vehiculo vehiculoAct = Vehiculo.filtrarPlaca(vehiculos, placa);
-//            Vehiculo vehiculoAct2 = Vehiculo.filtrarPlaca(usuarioActual.getVehiculos(), placa);
-//            vehiculoAct = vehiculoAct2;
+            Vehiculo vehiculoAct2 = Vehiculo.filtrarPlaca(usuarioActual.getVehiculos(), placa);
             String marca = (String)this.txtMarca.getText();
             String modelo = (String)this.txtModelo.getText();
             String tipo = (String)this.cbxTipo.getSelectionModel().getSelectedItem();
@@ -448,20 +447,25 @@ public class DashboardController implements Initializable {
             
             if (!marca.isEmpty()){
                 vehiculoAct.setMarca(marca);
+                vehiculoAct2.setMarca(marca);
             }
             if (!modelo.isEmpty()){
                 vehiculoAct.setModelo(modelo);
+                vehiculoAct2.setModelo(modelo);
             }
             if (!tipo.isEmpty()){
                 vehiculoAct.setTipo(tipo);
+                vehiculoAct2.setTipo(tipo);
             }
             if (!stKilometraje.isEmpty()){
                 double kilometraje = Double.parseDouble(stKilometraje);
                 vehiculoAct.setKilometraje(kilometraje);
+                vehiculoAct2.setKilometraje(kilometraje);
             }
             if (!stPrecio.isEmpty()){
                 int precion = Integer.parseInt(stPrecio);
                 vehiculoAct.setPrecio(precion);
+                vehiculoAct2.setPrecio(precion);
             } 
             try{
                 Vehiculo.saveListVehiculosSer(vehiculos);
@@ -560,7 +564,7 @@ public class DashboardController implements Initializable {
             Usuario.saveListUsuariosSer(usuarios);
             String cuerpo = "El propietario del vehículo:\n" + v.getMarca() + " " + v.getModelo() + " - Placa: " + v.getPlaca() + " - Recorrido: " + v.getKilometraje() + "\nHa aceptado tu oferta de: " + v.getPrecio();
             UtileriaMensajes.sendMensaje(vendedor.getCorreo(), "¡Una de sus ofertas ha sido aceptada!", cuerpo + "\nCorreo del propietario: " + usuarioActual.getCorreo());
-            UtileriaMensajes.generarAlertaInfo("!Compra realizada¡", "¡Se ha informado con éxito al vendedor de su compra!");
+            UtileriaMensajes.generarAlertaInfo("¡Compra realizada!", "¡Se ha informado con éxito al vendedor de su compra!");
             actualizarContabilidad(vehiculos);
             return true;
         } else {
@@ -574,14 +578,17 @@ public class DashboardController implements Initializable {
         comprarVehiculo(vehiculoActual);
     }
     
-    private void eliminarVehiculoFavorito(Vehiculo v){ //no elimina
-        try {
-            usuarioActual.getVehiculos().remove(v);
-            Usuario.saveListUsuariosSer(usuarios);
-            UtileriaMensajes.generarAlertaInfo("Vehiculo retirado", "Se ha quitado el vehiculo de placa: " + v.getPlaca() + " de su lista de favoritos");
-        } catch (Exception e) {
-            UtileriaMensajes.generarAlertaError("Ha ocurrido un error", "Parece que este vehiculo no se quiere ir de su lista de favoritos");
-        }
+    private void eliminarVehiculoFavorito(Vehiculo v){
+//        try {
+//            for(int i = 0; i < usuarioActual.getFavoritos().size(); i++){
+//                if(v.equals(usuarioActual.getFavoritos().get(i)))
+//                    usuarioActual.getFavoritos().remove(i);
+//            }
+//            Usuario.saveListUsuariosSer(usuarios);
+//            UtileriaMensajes.generarAlertaInfo("Vehiculo retirado", "Se ha quitado el vehiculo de placa: " + v.getPlaca() + " de su lista de favoritos");
+//        } catch (Exception e) {
+//            UtileriaMensajes.generarAlertaError("Ha ocurrido un error", "Este vehiculo ya no se encuentra en su lista de favoritos");
+//        }
     }
 
     @FXML
@@ -602,7 +609,7 @@ public class DashboardController implements Initializable {
     private void fnAñadirFavorito(MouseEvent event) {
         if(!usuarioActual.getFavoritos().contains(vehiculoActual)){
             usuarioActual.getFavoritos().addLast(vehiculoActual);
-            UtileriaMensajes.generarAlertaInfo("Vehiculo favorito", "Se ha añadio el vehiculo de placa: " + vehiculoActual.getPlaca() + " a su lista de favoritos");
+            UtileriaMensajes.generarAlertaInfo("Vehiculo favorito", "Se ha añadido el vehiculo de placa: " + vehiculoActual.getPlaca() + " a su lista de favoritos");
         } else{
             UtileriaMensajes.generarAlertaError("¿De nuevo?", "Ya tiene este vehículo en su lista de favoritos");
         }
