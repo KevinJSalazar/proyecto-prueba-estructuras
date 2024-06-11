@@ -123,7 +123,6 @@ public class UtileriaFunciones {
     
     public static void eliminarImagenVehiculoEliminado(String placa){
         String nombreImagen = placa+".png";
-//        String directorioProyecto = System.getProperty("user.dir");
         String rutaProyecto = System.getProperty("user.dir")+File.separator+"src"+File.separator+"main"+File.separator+"resources";
         String directorioProyecto = rutaProyecto + File.separator + "imagenesVehiculos";        
         Path rutaImagen = Paths.get(directorioProyecto, nombreImagen);
@@ -176,12 +175,6 @@ public class UtileriaFunciones {
         }
         return contabilizado;
     }
-    
-//    public static void actualizar(Usuario usuario, Vehiculo vehiculo){
-//        ArrayList<Vehiculo> vehiculosUsuario = usuario.getVehiculos();
-//        vehiculosUsuario.addLast(vehiculo);
-//        usuario.setVehiculos((ArrayList<Vehiculo>) vehiculosUsuario);
-//    }
     
     public static void verificarPertenencia(Usuario usuario, Vehiculo vehiculo, Button btn){
         if(vehiculo.getPropietario().getCorreo().equals(usuario.getCorreo())){

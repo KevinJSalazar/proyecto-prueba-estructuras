@@ -13,7 +13,6 @@ import ec.edu.espol.util.UtileriaMensajes;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -213,9 +212,6 @@ public class DashboardController implements Initializable {
             vehiculoActual = vehiculos.get(indiceActual);
             actualizarVehiculo(vehiculoActual);
             habilitarBtnsCA(vehiculoActual);
-            
-//            actualizarVehiculo(vehiculos.get(indiceActual));           
-//            habilitarBtnsCA(vehiculos.get(indiceActual));
         });
 
         btnAtrás.setOnAction(event -> {
@@ -227,9 +223,6 @@ public class DashboardController implements Initializable {
             vehiculoActual = vehiculos.get(indiceActual);
             actualizarVehiculo(vehiculoActual);
             habilitarBtnsCA(vehiculoActual);
-            
-//            actualizarVehiculo(vehiculos.get(indiceActual));
-//            habilitarBtnsCA(vehiculos.get(indiceActual));
         });         
     }
     
@@ -257,11 +250,7 @@ public class DashboardController implements Initializable {
             } else{
                 btnComprar.setDisable(false);
                 btnAñadirFavorito.setDisable(false);
-            }}
-//        } else{
-//            btnComprar.setDisable(true);
-//            btnAñadirCarrito.setDisable(true);
-//        }       
+            }}  
     }
     
     
@@ -283,7 +272,6 @@ public class DashboardController implements Initializable {
             dashboardAV.setVisible(false);
             dashboardFavoritos.setVisible(false);
             cargarVehiculos();
-//            actualizarContabilidad(vehiculos);
         } else if(event.getSource() == btnSeccionAgregar){
             dashboardPrincipal.setVisible(false);
             dashboardVV.setVisible(false);
@@ -300,7 +288,6 @@ public class DashboardController implements Initializable {
             dashboardVV.setVisible(false);
             dashboardAV.setVisible(false);
             dashboardFavoritos.setVisible(false);
-//            habilitarBtnsCA(vehiculoActual);
         }
     }
     
