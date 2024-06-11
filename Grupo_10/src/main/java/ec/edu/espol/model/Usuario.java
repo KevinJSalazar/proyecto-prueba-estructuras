@@ -39,15 +39,11 @@ public class Usuario implements Serializable{
     }
     
     public static boolean verificarFirmaCorreo(String correo){
-        ArrayList<String> firmas = new ArrayList<>();
-        firmas.addLast("hotmail.com");firmas.addLast("outlook.com");firmas.addLast("outlook.es");firmas.addLast("gmail.com");
-        if(correo.contains("@")){
+        if(correo.contains("@gmail.com")){
             String[] parteCorreo = correo.split("@");
-            if(parteCorreo.length >= 2 )
-                for(int i = 0; i < firmas.size(); i++){
-                    if(parteCorreo[1].equals(firmas.get(i)))
-                        return true;
-                }
+            if(parteCorreo.length >= 2 ){
+                return true;
+            }
         }
         return false;
     }

@@ -294,6 +294,7 @@ public class DashboardController implements Initializable {
             dashboardPrincipal.setVisible(false);
             dashboardVV.setVisible(false);
             dashboardAV.setVisible(false);
+            cargarFavoritos();
         } else{
             dashboardPrincipal.setVisible(true);
             dashboardVV.setVisible(false);
@@ -428,7 +429,8 @@ public class DashboardController implements Initializable {
     @FXML
     private void fnEliminarVehiculo(MouseEvent event) {
         if(UtileriaMensajes.generarAlertaConfirmacion("Eliminar vehículo", "¿Está seguro de eliminar el vehículo de placa "+vehiculoSeleccionadoActual.getPlaca()+"?")){
-            UtileriaFunciones.eliminarMiVehiculo(usuarioActual, vehiculoSeleccionadoActual);
+            UtileriaFunciones.eliminarMiVehiculo(usuarioActual, vehiculoSeleccionadoActual, vehiculos);
+            UtileriaFunciones.eliminarFavoritoOtrosUsuarios(usuarios, vehiculoSeleccionadoActual);
             Usuario.saveListUsuariosSer(usuarios);
         } else{}
         limpiarSeleccion();
@@ -572,11 +574,11 @@ public class DashboardController implements Initializable {
     private boolean comprarVehiculo(Vehiculo v){
         if(UtileriaMensajes.generarAlertaConfirmacion("Confirmar compra", "¿Está seguro de comprar este vehículo?")){
             Usuario vendedor = Usuario.filtrarUsuario(usuarios, v.getPropietario().getCorreo());
-            UtileriaFunciones.eliminarMiVehiculo(vendedor, v);
+            UtileriaFunciones.eliminarMiVehiculo(vendedor, v, vehiculos);
             Usuario.saveListUsuariosSer(usuarios);
 
-            String cuerpo = "El propietario del vehículo:\n" + v.getMarca() + " " + v.getModelo() + " - Placa: " + v.getPlaca() + " - Recorrido: " + v.getKilometraje() + "\nHa aceptado tu compra por: " + v.getPrecio();
-            UtileriaMensajes.sendMensaje(vendedor.getCorreo(), "¡Tu compra se ha realizado con éxito!", cuerpo + "\nCorreo del propietario: " + usuarioActual.getCorreo());
+            String cuerpo = "Tu vehículo:\n" + v.getMarca() + " " + v.getModelo() + " - Placa: " + v.getPlaca() + " - Recorrido: " + v.getKilometraje() + "\nHa sido comprado por: " + v.getPrecio();
+            UtileriaMensajes.sendMensaje(vendedor.getCorreo(), "¡Tu compra se ha realizado con éxito!", cuerpo + "\nCorreo del comprador: " + usuarioActual.getCorreo());
             UtileriaMensajes.generarAlertaInfo("¡Compra realizada!", "¡Se ha informado con éxito al vendedor de su compra!");
             actualizarContabilidad(vehiculos);
             return true;
@@ -589,36 +591,27 @@ public class DashboardController implements Initializable {
     @FXML
     private void fnComprarVehiculo(MouseEvent event) {
         comprarVehiculo(vehiculoActual);
+        UtileriaFunciones.eliminarFavoritoOtrosUsuarios(usuarios, vehiculoActual);
+        Usuario.saveListUsuariosSer(usuarios);
     }
     
-
-//    private void eliminarVehiculoFavorito(Vehiculo v){
-////        try {
-////            for(int i = 0; i < usuarioActual.getFavoritos().size(); i++){
-////                if(v.equals(usuarioActual.getFavoritos().get(i)))
-////                    usuarioActual.getFavoritos().remove(i);
-////            }
-////            Usuario.saveListUsuariosSer(usuarios);
-////            UtileriaMensajes.generarAlertaInfo("Vehiculo retirado", "Se ha quitado el vehiculo de placa: " + v.getPlaca() + " de su lista de favoritos");
-////        } catch (Exception e) {
-////            UtileriaMensajes.generarAlertaError("Ha ocurrido un error", "Este vehiculo ya no se encuentra en su lista de favoritos");
-////        }
-//
-//    }
+    private void eliminarVehiculoFavorito(){
+        UtileriaFunciones.eliminarVfavorito(usuarioActual, vehiculoFavoritoActual);
+        Usuario.saveListUsuariosSer(usuarios);
+        txtInfoFavorito.setText("");   
+        vehiculoFavoritoActual = null;
+    }
 
     @FXML
     private void fnEliminarFavorito(MouseEvent event) {
-        UtileriaFunciones.eliminarVfavorito(usuarioActual, vehiculoFavoritoActual);
-        Usuario.saveListUsuariosSer(usuarios);
-        cargarFavoritos();
+        eliminarVehiculoFavorito();
     }
 
     @FXML
     private void fnComprarFavorito(MouseEvent event) {
         if(!usuarioActual.getFavoritos().isEmpty()){
             if(comprarVehiculo(vehiculoFavoritoActual)){
-                UtileriaFunciones.eliminarVfavorito(usuarioActual, vehiculoFavoritoActual);
-                cargarFavoritos();
+                eliminarVehiculoFavorito();
             } else{}
         } else{
             UtileriaMensajes.generarAlertaError("Sin favoritos", "No tiene vehículos favoritos para comprar.");
@@ -635,8 +628,6 @@ public class DashboardController implements Initializable {
         } else{
             UtileriaMensajes.generarAlertaError("¿De nuevo?", "Ya tiene este vehículo en su lista de favoritos");
         }
-        
-        
     }
     
     private void cargarFavoritos(){
@@ -689,6 +680,7 @@ public class DashboardController implements Initializable {
             lblMDefault.setText("No tiene favoritos por el momento");      
             vehiculoFavoritoActual = null;
         }
+        Usuario.saveListUsuariosSer(usuarios);
     }
 
     @FXML

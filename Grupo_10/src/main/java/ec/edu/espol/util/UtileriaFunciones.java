@@ -195,15 +195,14 @@ public class UtileriaFunciones {
         return vehiculo.getPropietario().getCorreo().equals(usuario.getCorreo());
     }
     
-    public static void eliminarMiVehiculo(Usuario usuario, Vehiculo vehiculo){
-        ArrayList<Vehiculo> vehiculos = Vehiculo.readFileSer();
+    public static void eliminarMiVehiculo(Usuario usuario, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos){
         for(int i = 0; i < vehiculos.size(); i++){
             if(vehiculo.getPlaca().equals(vehiculos.get(i).getPlaca())){
                vehiculos.remove(i);
                eliminarImagenVehiculoEliminado(vehiculo.getPlaca());  // Eliminar foto del vehículo
             }
         }
-        Vehiculo.saveListVehiculosSer((ArrayList<Vehiculo>) vehiculos);
+        Vehiculo.saveListVehiculosSer(vehiculos);
         
         for(int i = 0; i < usuario.getVehiculos().size(); i++){
             ArrayList<Vehiculo> vehiculosUsuario = usuario.getVehiculos();
@@ -219,6 +218,15 @@ public class UtileriaFunciones {
             if(vehiculo.getPlaca().equals(lFavoritos.get(i).getPlaca())){
                 lFavoritos.remove(i);
                 usuario.setFavoritos(lFavoritos);
+            }
+        }
+    }
+    
+    public static void eliminarFavoritoOtrosUsuarios(ArrayList<Usuario> usuarios, Vehiculo vehiculo){
+        for (Usuario u : usuarios){
+            for(Vehiculo v : u.getFavoritos()){
+                if(vehiculo.equals(v))
+                    u.getFavoritos().remove(v);
             }
         }
     }

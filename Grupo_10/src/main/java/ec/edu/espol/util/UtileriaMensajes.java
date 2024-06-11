@@ -46,7 +46,7 @@ public class UtileriaMensajes {
         return false;   
     }
     
-    public static void sendMensaje(String destinatario, String asunto, String cuerpo) {
+    public static void sendMensaje(String comprador, String asunto, String cuerpo) {
         String remitente = "vendemosttv@gmail.com";
         String claveemail = "frupcoheitutbiza";
 
@@ -63,7 +63,7 @@ public class UtileriaMensajes {
 
         try {
             message.setFrom(new InternetAddress(remitente));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(comprador));
             message.setSubject(asunto);
             message.setText(cuerpo);
             Transport transport = session.getTransport("smtp");

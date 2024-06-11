@@ -59,7 +59,7 @@ public class RegisterController implements Initializable {
             UtileriaMensajes.generarAlertaError("Información incompleta", "Debe rellenar todos los campos obligatoriamente");
         } else{
             if(UtileriaFunciones.verificarCondiciones(Usuario.verificarFirmaCorreo(correo)))
-                UtileriaMensajes.generarAlertaError("Correo inválido", "Debe ingresar una dirección de correo válida. No institucional.");
+                UtileriaMensajes.generarAlertaError("Correo inválido", "Debe ingresar una dirección de correo gmail.");
             else if(UtileriaFunciones.verificarCondiciones(Usuario.verificarExtContraseña(contraseña)))
                 UtileriaMensajes.generarAlertaError("Contraseña inválida", "Debe ingresar una contraseña entre 8 y 20 caracteres.");
             else if(UtileriaFunciones.verificarCondiciones(repetContraseña.equals(contraseña)))
